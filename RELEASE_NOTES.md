@@ -1,15 +1,21 @@
-# 1.0.0 offline demo
+# Release notes
 
-- Bind refund drafts to their existing analysis and exact payment payload.
-- Await real replay results, recover from reopening errors, coalesce concurrent
-  requests and preserve validator findings, including skipped checks.
-- Display verification metadata without fabricated passing checks. Mark offline
-  remote confirmation as not applicable in summaries and execution history.
-- Distinguish real Sandbox observations from fixture-based refund checks.
-- Refresh pending counts after batch submission and report the excluded cases.
-- Improve merchant authoring layout and capture-specific approval wording.
-- Share a portable launcher with real failure exit codes, port checks, cached
-  setup/builds and a fixed package-local offline database.
-- Include full source/tests, frozen OpenAPI contract and owner-approved MIT.
+## DisputePilot 1.0.0
 
-No real messages, refunds or evidence are sent by the offline demo.
+One source tree contains the merchant workspace, PayPal Sandbox adapters, local
+Ollama provider, offline demo, tests, and frozen API contract.
+
+- Case analysis and evidence references with missing-material validation.
+- Exact-payload human approval followed by a separate execution step.
+- Message, evidence, and synthetic partial-refund walkthroughs with audit history.
+- A resettable five-case offline demo that needs no payment credentials or model.
+- Optional Sandbox and real-model configuration; Sandbox writes off by default.
+- MIT license, third-party notices, and two reviewed synthetic demo databases.
+
+Start with the [README](README.md). Configuration alternatives are in
+[Integration options](docs/LIVE_INTEGRATION.md); recorded checks and their limits
+are in [Validation status](docs/VALIDATION.md).
+
+The [v1.0.0 release](https://github.com/MingyuJiang/DisputePilot/releases/tag/v1.0.0)
+is a fixed source snapshot. Later documentation improvements appear on `main`;
+they do not move the published tag or claim new API/model validation.

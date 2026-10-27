@@ -1,136 +1,190 @@
-# DisputePilot 1.0.0
+# DisputePilot
 
-An AI-assisted dispute workspace for small merchants. Inspect a claim and its
-evidence, prepare a precise response, review deterministic validation, approve
-the exact payload, and run a separate audited execution step.
+An AI-assisted PayPal dispute workspace for small merchants. Review a buyer's
+claim and its evidence, prepare a response, approve the exact payload, and inspect
+the execution history. Built with React, TypeScript, FastAPI, and SQLite.
 
-React/TypeScript/Vite and FastAPI share one local origin; SQLAlchemy and SQLite
-persist the workflow. The same source includes optional PayPal Sandbox and local
-Ollama integration. The default launchers run the reproducible **Offline Demo**.
-See [Live Integration](docs/LIVE_INTEGRATION.md), the safe [.env.example](.env.example),
-and [validation status](docs/VALIDATION.md) for connected configuration and evidence.
+**One codebase, two ways to run:**
 
-**The default Offline Demo runs offline replay. No PayPal request, real message, evidence
-submission or refund is sent. No real funds move.** Four analyses are recorded
-model outputs; the synthetic capture uses a deterministic planner. These are
-identified in the UI, not presented as live inference or remote confirmation.
+| | Offline demo | Online integration |
+|---|---|---|
+| Case data | Five synthetic demo cases | Your authorized PayPal Sandbox disputes |
+| AI | Four recorded analyses; deterministic capture planner | Your local Ollama model |
+| Credentials / model | Neither needed | Your Sandbox app credentials and installed model |
+| Start command | `start.bat` or `bash start.sh` | Run the backend directly with `.env` |
+| Payment actions | Simulated replay | Sandbox reads; writes disabled by default |
 
-## Run locally
+Here, **online means PayPal Sandbox integration**, while the UI and model run
+locally. This is not a publicly hosted production payment service.
 
-Requirements: Python 3.11+ and Node.js 20.19+ or 22.12+ (with npm). First setup
-downloads Python/npm dependencies. No PayPal account, credentials, GPU or
-model download is required. On later starts unchanged dependencies and frontend
-builds are reused, so registry access is not needed.
+## Requirements and download
 
-Windows, from an extracted folder (paths with spaces supported):
+- Python **3.11+**.
+- Node.js **20.19+ or 22.12+**, including npm.
+- Internet access for the first dependency installation.
+- Windows is verified; native Linux/macOS and Docker remain unverified.
 
-```bat
-start.bat
-set PORT=8157
-start.bat
+Clone the repository, or download and extract the source from
+[Releases](https://github.com/MingyuJiang/DisputePilot/releases).
+
+```powershell
+git clone https://github.com/MingyuJiang/DisputePilot.git
+Set-Location DisputePilot
 ```
 
-If Python is not on PATH, set `DP_PYTHON` to your Python executable first.
-Open http://127.0.0.1:8000, or the selected port. Stop with Ctrl+C.
+All Windows commands below use **PowerShell**. Start each setup path from the
+repository root. Do not run the two servers on the same port at the same time.
 
-Linux/macOS/Git Bash:
+## 1. Offline demo — no credentials or model required
 
-```sh
-./start.sh
-PORT=8157 ./start.sh
+From the repository root:
+
+```powershell
+.\start.bat
 ```
 
-Windows is tested in the release report. macOS, native Linux and Docker are
-not verified here. On a filesystem that loses executable permissions, use
-`bash start.sh`. Set DP_PYTHON to select another Python executable.
+Open **http://127.0.0.1:8000**. First start installs dependencies and builds the
+frontend; later starts reuse them. Stop with **Ctrl+C**.
 
-Both launchers delegate to scripts/launcher.py. The server uses one loopback
-port for UI and API, with its own data/demo.sqlite3. It does not accept inherited
-DP database, credential or execution-mode overrides. Do not expose this demo
-as a production merchant service; role headers are simulated identities.
+If port 8000 is occupied, set a different port before starting:
 
-Useful controls:
-
-```bat
-start.bat --prepare-only
-start.bat --rebuild
-start.bat --no-install
+```powershell
+$env:PORT = "8157"
+.\start.bat
 ```
 
-Exit codes: 0 = normal stop/preparation, 1 = install/build/runtime failure,
-2 = missing/unsupported runtime or invalid PORT, 3 = occupied port. Changing
-frontend sources or locked dependencies invalidates the relevant cache.
+On Linux/macOS/Git Bash, the corresponding entry point is `bash start.sh`.
+If Python is not on PATH, set `DP_PYTHON` to its executable before starting.
 
-## Five-case walkthrough
+The default launcher always selects offline replay and frozen analysis, uses
+`data/demo.sqlite3`, and disables PayPal access. It deliberately ignores `.env`
+and inherited `DP_*` mode/credential overrides. **Editing `.env` does not turn
+`start.bat` or `start.sh` into an online launcher.**
 
-1. Overview starts with five awaiting analysis and no business records.
-2. AI Assistant → Analyze my disputes. O7 and O13 are ready for review; O9 is
-   blocked for missing proof; O16 waits; CAP requires a human payment decision.
-3. Submit eligible proposals. The batch records two pending approvals; approval
-   does not execute anything.
-4. Open O7 authoring, edit a clarification message and submit it. A new draft
-   does not rewrite a previous pending text. Review its exact payload, approve,
-   then return to the case to execute an offline replay.
-5. Open O9 and inspect V5 / EVIDENCE_MATERIAL_MISSING. No approval or execution
-   should exist for its missing-proof action. Missing proof does not ban a
-   legitimate clarification message in another permitted workflow.
-6. Open CAP-DEMO-9001: 42.00 USD captured, 12.00 already refunded, 30.00 remaining.
-   Select Partial, enter 10.00 USD and a reason, create and submit. Review and
-   approve that exact 10.00 payload, then replay. The displayed expected 20.00
-   remainder is a review calculation; the capture snapshot remains frozen.
-7. Review history, batch origin and audit. REPLAYED never means adjudicated,
-   dispute won, remote confirmation or real financial settlement.
-8. Help → Guided demo → Reset. A consistent backup is created in data/backups,
-   Golden restores five cases and zero analyses/proposals/approvals/executions,
-   and a DEMO_RESET audit event is added. The workspace refreshes immediately.
+Try the workflow:
 
-Refresh/restart preserves business state. Reset replaces current demo state;
-previous audit and business rows remain recoverable in its backup.
+1. Open AI Assistant and analyze the five cases.
+2. Review O7's message, submit it, approve its exact text, then replay it.
+3. Inspect O9's missing-evidence block and O16's wait decision.
+4. Create a 10 USD partial-refund proposal for the synthetic capture; approve
+   and replay it, then inspect the audit history.
+5. Use Help → Guided demo → Reset to restore a clean five-case workspace.
 
-## Tests and contract
+Recorded analysis is not fresh model inference. Replay does not send a message,
+submit evidence, refund money, or resolve a dispute. Approval and execution are
+separate steps.
 
-Full tests are included rather than relying on an external development tree.
-After first preparation:
+## 2. Online integration — PayPal Sandbox + real AI
 
-```bat
-backend\.venv\Scripts\python.exe -m pip install -r backend\requirements-dev.txt
-backend\.venv\Scripts\python.exe -m pytest backend\tests
-cd frontend
+This path uses the **same backend and frontend**. You need your own authorized
+PayPal Developer Sandbox app and merchant test account, plus a local Ollama
+runtime with an installed model. No credentials or model weights are included.
+
+### A. Prepare the application
+
+From the repository root, install/build without starting the offline server:
+
+```powershell
+.\start.bat --prepare-only
+if (!(Test-Path .env)) { Copy-Item .env.example .env }
+```
+
+### B. Configure PayPal and AI
+
+In a separate terminal, start Ollama if it is not already running. Use
+`ollama list` to find the exact installed model tag. The historically tested
+tag is `qwen3.6:35b-a3b-q4_K_M`; use your runtime's actual tag.
+
+```powershell
+# Separate terminal; leave it running. Skip if Ollama is already running.
+ollama serve
+```
+
+Edit the local **`.env`** file. Replace the three `YOUR_...` placeholders below,
+and retain the other settings from `.env.example`:
+
+```dotenv
+DP_DATA_MODE=paypal_sandbox
+DP_AI_PROVIDER=ollama_local
+DP_AUTO_IMPORT=1
+DP_DATABASE_URL=sqlite:///data/sandbox.sqlite3
+DP_STATIC_DIR=../frontend/dist
+DP_LLM_BASE_URL=http://127.0.0.1:11434
+DP_LLM_MODEL=YOUR_INSTALLED_MODEL_TAG
+DP_PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com
+DP_PAYPAL_CLIENT_ID=YOUR_SANDBOX_CLIENT_ID
+DP_PAYPAL_CLIENT_SECRET=YOUR_SANDBOX_CLIENT_SECRET
+DP_PAYPAL_WRITES_ENABLED=0
+DP_PAYPAL_WRITE_ALLOW=
+```
+
+Keep `.env` local: it is ignored by Git. Use a **separate Sandbox database**;
+do not copy the synthetic Golden into it. Use a fresh terminal without old
+`DP_*` environment overrides, which take precedence over `.env`.
+
+### C. Start the connected backend and UI
+
+```powershell
+Set-Location backend
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --env-file ../.env --host 127.0.0.1 --port 8157
+```
+
+Open **http://127.0.0.1:8157**. The backend serves the prebuilt frontend and API
+on the same port. `PORT` applies only to the default launcher; change uvicorn's
+`--port` here if necessary.
+
+- Startup reads authorized Sandbox disputes. It does not create disputes.
+- Requesting a case analysis uses the configured Ollama model.
+- `GET /api/v1/health` identifies `PAYPAL_SANDBOX_READ_ONLY`; execution can still
+  be labeled `REPLAY` because real payment writes are disabled.
+- `GET /api/v1/llm/status` checks model-runtime availability. A successful ping
+  is not itself proof that an analysis was generated.
+
+An empty case list may mean the Sandbox account has no eligible disputes.
+Import errors are reported rather than silently replaced with demo cases.
+Real AI requests and PayPal execution are independent: inference does not
+authorize a financial action.
+
+Write-capable adapters remain in the source, behind explicit configuration,
+per-action allow-listing, validation, and human approval. This quick start keeps
+them disabled. See [Integration options](docs/LIVE_INTEGRATION.md) for AI-only
+evaluation, Sandbox without a model, Unix commands, and troubleshooting.
+
+## Validation and limitations
+
+| Recorded check | Result / scope |
+|---|---|
+| Local checks, 27 October 2026 | Backend 428 passed, 1 real-model test deselected; frontend 236 passed; typecheck and build passed |
+| Configuration smoke checks, 27 October | Offline five-case startup and no-credential Sandbox configuration passed; no remote API or real inference |
+| Historical real AI, 18 October | Local Ollama inference through FastAPI; not a model-accuracy benchmark |
+| Historical PayPal, 20 October | One Sandbox evidence submission and two GET readbacks; not verified real refunds/messages or a won dispute |
+
+Details and provenance: [Validation status](docs/VALIDATION.md) and
+[Integration evidence](docs/INTEGRATION_EVIDENCE.md). Documentation-only updates
+do not represent new model calls, Sandbox operations, or full test reruns.
+
+To run the local software checks after preparation:
+
+```powershell
+backend\.venv\Scripts\python.exe -m pip install -r backend/requirements-dev.txt
+backend\.venv\Scripts\python.exe -m pytest backend/tests -k "not test_real_35b_smoke_case_o4"
+Set-Location frontend
 npm test
 npm run typecheck
 npm run build
 ```
 
-On Unix use backend/.venv/bin/python. Tests use isolated temporary databases
-and mocked payment transports. The real local Ollama probe is skipped when
-no local model is available. Read contracts/v1/MANIFEST.sha256 for frozen
-OpenAPI hashes; demo-only operational endpoints are outside that contract.
+The UI uses simulated identity headers, not production authentication. Keep the
+application on loopback. Only loopback Ollama is supported for real AI; there is
+no generic cloud-model adapter. Production PayPal hosts are rejected.
 
-## Source and submission
+## Documentation
 
-See [Architecture and scope](docs/ARCHITECTURE.md),
-[PayPal and AI integration evidence](docs/INTEGRATION_EVIDENCE.md), and
-[Hackathon handoff](docs/HACKATHON_SUBMISSION.md) for integration boundaries,
-historical validation, and the English pitch.
-The Sandbox and local-model adapters are source components, not external
-services enabled by this launcher. The [integration guide](docs/LIVE_INTEGRATION.md)
-documents the separate direct backend entry point for real inference and read-only
-Sandbox access. Never relabel fixtures as API observations. Video hosting and
-Devpost submission are separate from this source release.
+- [Documentation index](docs/README.md) — where to find each guide.
+- [Architecture](docs/ARCHITECTURE.md) — components, providers, and safety gates.
+- [Release notes](RELEASE_NOTES.md) — what 1.0.0 contains.
+- [Hackathon handoff](docs/HACKATHON_SUBMISSION.md) — submission text and remaining entry steps.
 
-MIT License for entrant-owned code, approved by the project owner. Third-party
-software retains its own terms; see THIRD_PARTY_NOTICES.md. PayPal is a
-third-party service; this project does not claim endorsement.
-
-## Source snapshot
-
-This repository starts from the accepted 25 October 2026 offline release.
-Publication preparation on 27 October adds the integration-evidence summary,
-safe configuration and connected-mode/validation guides, updates ignore rules,
-preserves source bytes through Git attributes, normalizes the Unix launcher to LF,
-and regenerates MANIFEST.sha256.
-Application logic, tests, dependencies, and synthetic fixtures are unchanged.
-The accepted test records report 428 backend tests passed with one real-model
-test skipped, and 236 frontend tests passed. These are historical software
-checks, not new live integration tests or model-quality scores. Current publication
-checks are listed separately in [Validation status](docs/VALIDATION.md).
+MIT for project-owned code. See [LICENSE](LICENSE) and
+[third-party notices](THIRD_PARTY_NOTICES.md). PayPal is a third-party service;
+the project does not claim endorsement.
