@@ -15,15 +15,15 @@ at 04:00 China Standard Time. Keep access available through judging.
 
 ## Entrant actions still required
 
-- Publish the reviewed code and supply the repository URL.
-- Record the running application and publish the YouTube video.
+- Use this repository's public URL in the submission form.
+- Publish the final application video on YouTube and provide its public URL.
 - Complete Devpost submission and confirm authorship and entry eligibility.
 - Substantiate real PayPal Sandbox and AI integration with your approved
   development evidence. This build replays frozen AI outputs and synthetic
   payments; do not represent them as fresh model/API calls.
 
-No repository was pushed, video uploaded, agreement accepted or entry
-submitted by this local release task.
+This source release does not upload a video, accept entrant agreements, or
+submit a Devpost entry. Those submission steps remain separate.
 
 ## English project description
 

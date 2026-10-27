@@ -1,10 +1,16 @@
-# DisputePilot 1.0.0 — offline demo
+# DisputePilot 1.0.0
 
 An AI-assisted dispute workspace for small merchants. Inspect a claim and its
 evidence, prepare a precise response, review deterministic validation, approve
 the exact payload, and run a separate audited execution step.
 
-**This edition runs offline replay. No PayPal request, real message, evidence
+React/TypeScript/Vite and FastAPI share one local origin; SQLAlchemy and SQLite
+persist the workflow. The same source includes optional PayPal Sandbox and local
+Ollama integration. The default launchers run the reproducible **Offline Demo**.
+See [Live Integration](docs/LIVE_INTEGRATION.md), the safe [.env.example](.env.example),
+and [validation status](docs/VALIDATION.md) for connected configuration and evidence.
+
+**The default Offline Demo runs offline replay. No PayPal request, real message, evidence
 submission or refund is sent. No real funds move.** Four analyses are recorded
 model outputs; the synthetic capture uses a deterministic planner. These are
 identified in the UI, not presented as live inference or remote confirmation.
@@ -24,7 +30,7 @@ set PORT=8157
 start.bat
 ```
 
-If Python is not on PATH: `set DP_PYTHON=C:\path\to\python.exe` first.
+If Python is not on PATH, set `DP_PYTHON` to your Python executable first.
 Open http://127.0.0.1:8000, or the selected port. Stop with Ctrl+C.
 
 Linux/macOS/Git Bash:
@@ -107,9 +113,10 @@ See [Architecture and scope](docs/ARCHITECTURE.md),
 [Hackathon handoff](docs/HACKATHON_SUBMISSION.md) for integration boundaries,
 historical validation, and the English pitch.
 The Sandbox and local-model adapters are source components, not external
-services enabled by this launcher. Use independently approved development
-evidence to substantiate actual integrations; never relabel fixtures as API
-observations. Public repository/video/Devpost submission are separate actions.
+services enabled by this launcher. The [integration guide](docs/LIVE_INTEGRATION.md)
+documents the separate direct backend entry point for real inference and read-only
+Sandbox access. Never relabel fixtures as API observations. Video hosting and
+Devpost submission are separate from this source release.
 
 MIT License for entrant-owned code, approved by the project owner. Third-party
 software retains its own terms; see THIRD_PARTY_NOTICES.md. PayPal is a
@@ -119,9 +126,11 @@ third-party service; this project does not claim endorsement.
 
 This repository starts from the accepted 25 October 2026 offline release.
 Publication preparation on 27 October adds the integration-evidence summary,
-updates documentation links and ignore rules, preserves source bytes through
-Git attributes, normalizes the Unix launcher to LF, and regenerates MANIFEST.sha256.
+safe configuration and connected-mode/validation guides, updates ignore rules,
+preserves source bytes through Git attributes, normalizes the Unix launcher to LF,
+and regenerates MANIFEST.sha256.
 Application logic, tests, dependencies, and synthetic fixtures are unchanged.
 The accepted test records report 428 backend tests passed with one real-model
 test skipped, and 236 frontend tests passed. These are historical software
-checks, not new live integration tests or model-quality scores.
+checks, not new live integration tests or model-quality scores. Current publication
+checks are listed separately in [Validation status](docs/VALIDATION.md).

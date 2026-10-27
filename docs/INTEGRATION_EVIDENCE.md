@@ -34,7 +34,7 @@ The AI provider is optional. The accepted release's real-model smoke test was sk
 
 For the default working demo, follow the repository README. Python and Node are needed; first setup downloads dependencies. PayPal credentials, model weights, and a GPU are not needed for offline replay.
 
-For integration review, inspect the local-provider configuration and PayPal configuration modules and their tests. Optional real inference requires a separately installed Ollama runtime and the model; optional Sandbox access requires the reviewer's own authorized Sandbox application. Credentials and weights are not distributed with the application. The safe demo launcher is not a real-integration launcher. A separate, tested operator guide is needed before advertising an optional connected launch procedure as a supported judge-facing path.
+For integration review, inspect the local-provider configuration and PayPal configuration modules and their tests. Optional real inference requires a separately installed Ollama runtime and the model; optional Sandbox access requires the reviewer's own authorized Sandbox application. Credentials and weights are not distributed with the application. The safe demo launcher is not a real-integration launcher. See the [integration guide](LIVE_INTEGRATION.md) for direct-backend configuration and [validation status](VALIDATION.md) for what was checked in this publication. Current publication checks do not rerun remote Sandbox operations or real inference.
 
 ## Evidence provenance
 

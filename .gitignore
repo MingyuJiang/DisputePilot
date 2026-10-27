@@ -8,9 +8,18 @@
 *.key
 *.p12
 *.pfx
+*.crt
+*.cer
+*.p7b
+*.p7c
 credentials.json
 token.json
 cookies*.json
+secrets*.json
+storage-state*.json
+.ssh/
+.aws/
+.codex/
 
 # Local dependencies, caches, builds
 .venv/
@@ -20,6 +29,7 @@ frontend/dist/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+pytest-cache-files-*/
 .mypy_cache/
 .ruff_cache/
 *.tsbuildinfo
@@ -32,6 +42,9 @@ coverage/
 # Runtime and local tools
 backend/out/
 backend/data/*.sqlite3
+*.sqlite3
+*.sqlite
+*.db
 data/backups/
 *.sqlite3-wal
 *.sqlite3-shm
