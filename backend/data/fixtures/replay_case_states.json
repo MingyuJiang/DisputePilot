@@ -1,0 +1,911 @@
+{
+  "_meta": {
+    "name": "DisputePilot offline replay case states",
+    "generated_by": "tools/generate_replay_states.py",
+    "generated_at": "2026-10-17",
+    "source": "reference/cases/CANONICAL_CASES_OFFLINE_SNAPSHOT.json (frozen, sha256-verified)",
+    "warning": "FIXTURE capability snapshots only. They are NOT live HATEOAS observations and must never be reported as current PayPal availability."
+  },
+  "states": {
+    "O4": {
+      "case_id": "O4",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1500,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1500,
+        "currency": "USD"
+      },
+      "seller_contacted": false,
+      "observed_at": "2026-10-15T11:02:53Z",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "PAYPAL_API_OBSERVED",
+      "note": "doc-level PAYPAL_API_OBSERVED values from the frozen trajectory record",
+      "state_version": 1
+    },
+    "O5": {
+      "case_id": "O5",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1600,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1600,
+        "currency": "USD"
+      },
+      "seller_contacted": false,
+      "observed_at": "2026-10-16T00:00:00Z",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "PAYPAL_API_OBSERVED",
+      "note": "doc-level PAYPAL_API_OBSERVED values from the frozen trajectory record",
+      "state_version": 1
+    },
+    "O6": {
+      "case_id": "O6",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "OTHER",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1700,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1700,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O7": {
+      "case_id": "O7",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1900,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1900,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O8": {
+      "case_id": "O8",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1950,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1950,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O9": {
+      "case_id": "O9",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 2100,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 2100,
+        "currency": "USD"
+      },
+      "seller_contacted": false,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O10": {
+      "case_id": "O10",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 2200,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 2200,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O11": {
+      "case_id": "O11",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 2300,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 2300,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O12": {
+      "case_id": "O12",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_FULFILLMENT",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 2400,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 2400,
+        "currency": "USD"
+      },
+      "seller_contacted": false,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O13": {
+      "case_id": "O13",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "OTHER",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1300,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1300,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O14": {
+      "case_id": "O14",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "OTHER",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1400,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1400,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O15": {
+      "case_id": "O15",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "OTHER",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1100,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1100,
+        "currency": "USD"
+      },
+      "seller_contacted": false,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O16": {
+      "case_id": "O16",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_REFUND",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 1800,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 1800,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O17": {
+      "case_id": "O17",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_REFUND",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 900,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 900,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    },
+    "O18": {
+      "case_id": "O18",
+      "dispute_status": "WAITING_FOR_SELLER_RESPONSE",
+      "lifecycle_stage": "INQUIRY",
+      "links": [
+        {
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "rel": "accept_claim",
+          "method": "POST"
+        },
+        {
+          "rel": "provide_evidence",
+          "method": "POST"
+        },
+        {
+          "rel": "send_message",
+          "method": "POST"
+        },
+        {
+          "rel": "make_offer",
+          "method": "POST"
+        },
+        {
+          "rel": "escalate",
+          "method": "POST"
+        }
+      ],
+      "evidence_requirements": [
+        {
+          "evidence_type": "PROOF_OF_REFUND",
+          "source": "REQUESTED_FROM_SELLER",
+          "open": true
+        }
+      ],
+      "allowed_response_options": {
+        "accept_claim": [
+          "REFUND"
+        ],
+        "make_offer": [
+          "REFUND"
+        ]
+      },
+      "dispute_amount": {
+        "value_minor": 850,
+        "currency": "USD"
+      },
+      "allowed_refund_amount": {
+        "value_minor": 850,
+        "currency": "USD"
+      },
+      "seller_contacted": true,
+      "observed_at": "",
+      "basis": "FIXTURE_SNAPSHOT",
+      "provenance": "SCENARIO_DEFINED",
+      "note": "SCENARIO_DEFINED hypothesis (expected requirement + pilot matrix); NOT a live PayPal observation",
+      "state_version": 1
+    }
+  }
+}

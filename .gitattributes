@@ -1,0 +1,4 @@
+# Preserve release bytes so manifest verification works after cloning.
+* -text
+*.sh text eol=lf
+*.sqlite3 binary

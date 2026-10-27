@@ -1,0 +1,400 @@
+{
+  "_meta": {
+    "source": "RECORDED_LLM_ANALYSES",
+    "note": "Pre-recorded local-LLM analyses exported verbatim from the offline demo database and replayed without a model. Recommendation, grounded facts and missing evidence are historical values, not new inference.",
+    "exported_at": "2026-10-21",
+    "source_db": "integration/offline-demo-20261021/demo.sqlite3",
+    "model_provider": "ollama-local",
+    "model_name": "qwen3.6:35b-a3b-q4_K_M",
+    "case_count": 4,
+    "case_ids": [
+      "DEMO-INR-O7",
+      "DEMO-SNAD-O13",
+      "DEMO-BILL-O16",
+      "DEMO-BLOCK-O9"
+    ]
+  },
+  "analyses": {
+    "DEMO-INR-O7": {
+      "analysis_id": "ANL-DEMO-INR-O7-.957587+0000-f40f1f",
+      "case_snapshot_hash": "e1324776f3c63c322c99a292180f6368717da5eb884970eced95eb2a7959c9da",
+      "factual_summary": "A buyer disputes a $19.00 USD order for a portable Bluetooth speaker under an Item Not Received claim, stating no shipping notification was received and the seller is unresponsive; the case status is Waiting for Seller Response with fulfillment posture NONE.",
+      "grounded_facts": [
+        {
+          "fact_id": "F1",
+          "statement": "The buyer claims they paid $19.00 USD for a portable Bluetooth speaker that was never received.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-INR-O7-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F2",
+          "statement": "No shipping notification or tracking information has been provided for this order.",
+          "fact_type": "SUPPORTED_INFERENCE",
+          "evidence_ids": [
+            "DEMO-INR-O7-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F3",
+          "statement": "The seller has not responded to the buyer's contact attempts.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-INR-O7-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F4",
+          "statement": "The fulfillment posture for this order is NONE.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-INR-O7-EV-AVAIL-1"
+          ],
+          "provenance": "AI_INFERRED"
+        }
+      ],
+      "missing_evidence": [
+        "any shipment record (none exists by design)",
+        "seller response to buyer contact"
+      ],
+      "contradictions": [],
+      "recommendation": "send-message",
+      "safety_flags": [
+        "SCENARIO_DEFINED content — not a real PayPal dispute record; do not claim real observations",
+        "fabrication of fulfillment evidence is forbidden",
+        "EVIDENCE_SPAN_MISSING — a model fact cited evidence but gave no verbatim span",
+        "UNVERIFIED_CLAIM_PRESENT — at least one model fact lacks verbatim evidence support; human review required",
+        "AI output is LLM inference from a local model — candidate analysis, not a decision; deterministic validation and manager approval still apply"
+      ],
+      "plan": {
+        "recommended_action": "send-message",
+        "rationale": [
+          "The case status is WAITING_FOR_SELLER_RESPONSE, indicating the next step in the workflow is for the seller to act.",
+          "The dispute is an Item Not Received claim with no fulfillment evidence (fulfillment_posture: NONE).",
+          "Standard procedure requires notifying the seller to provide tracking or resolve the issue before escalation or refund."
+        ],
+        "gaps": [
+          {
+            "gap": "Seller's response or lack thereof in system logs",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Actual shipping/tracking records from the sandbox order/capture system (AVAIL-2 content is generic placeholder)",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Proof of buyer's contact attempt with seller",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          }
+        ],
+        "alternatives": [
+          "escalate",
+          "accept-claim",
+          "wait"
+        ],
+        "wait_rule_applies": false,
+        "source": "MODEL_DRAFT_VALIDATED",
+        "draft_schema_version": "model-analysis-draft-v1",
+        "prompt_version": "dp-analysis-prompt-v1",
+        "candidate_only": true,
+        "uncertainty": "High uncertainty regarding real-world validity as this is a sandbox simulation. The system records provided are generic placeholders, limiting precise factual verification beyond the buyer's statement and case metadata."
+      },
+      "model_provider": "ollama-local",
+      "model_name": "qwen3.6:35b-a3b-q4_K_M",
+      "recorded_analysis_mode": "LLM",
+      "recorded_at": "2026-10-21T04:03:12.957742+00:00"
+    },
+    "DEMO-SNAD-O13": {
+      "analysis_id": "ANL-DEMO-SNAD-O13-.032522+0000-58eb4c",
+      "case_snapshot_hash": "b7ae26004ec639cef7f2ec16e5f1a41c2f5e79b39e2483509b07c21c154f708e",
+      "factual_summary": "A buyer disputes a $13.00 USD order for a queen-size cotton bed sheet set, claiming the delivered item is the wrong size and does not match the listing description. The case is in the inquiry stage with a status of waiting for seller response. No tracking information is available, and the seller has not yet been contacted or provided proof of fulfillment.",
+      "grounded_facts": [
+        {
+          "fact_id": "F1",
+          "statement": "The buyer claims the delivered item size does not match the listing description.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-SNAD-O13-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F2",
+          "statement": "The transaction amount was 13.00 USD.",
+          "fact_type": "OBSERVED_FACT",
+          "evidence_ids": [
+            "DEMO-SNAD-O13-EV-BUYER"
+          ],
+          "provenance": "SCENARIO_DEFINED"
+        },
+        {
+          "fact_id": "F3",
+          "statement": "The order was shipped without tracking.",
+          "fact_type": "OBSERVED_FACT",
+          "evidence_ids": [
+            "DEMO-SNAD-O13-EV-AVAIL-2"
+          ],
+          "provenance": "SCENARIO_DEFINED"
+        },
+        {
+          "fact_id": "F4",
+          "statement": "The seller has not yet provided proof of fulfillment.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-SNAD-O13-EV-AVAIL-1"
+          ],
+          "provenance": "AI_INFERRED"
+        }
+      ],
+      "missing_evidence": [
+        "tracking number (untracked shipment by design)",
+        "buyer photos (not fabricated)"
+      ],
+      "contradictions": [],
+      "recommendation": "provide-evidence",
+      "safety_flags": [
+        "SCENARIO_DEFINED content — not a real PayPal dispute record; do not claim real observations",
+        "fabrication of fulfillment evidence is forbidden",
+        "EVIDENCE_SPAN_MISSING — a model fact cited evidence but gave no verbatim span",
+        "UNVERIFIED_CLAIM_PRESENT — at least one model fact lacks verbatim evidence support; human review required",
+        "AI output is LLM inference from a local model — candidate analysis, not a decision; deterministic validation and manager approval still apply"
+      ],
+      "plan": {
+        "recommended_action": "provide-evidence",
+        "rationale": [
+          "The case is in the 'INQUIRY' stage and waiting for a seller response.",
+          "The buyer has provided a specific claim (wrong size) supported by their statement.",
+          "The system requires 'PROOF_OF_FULFILLMENT' from the seller to verify the item was sent as described.",
+          "Without tracking or seller proof, the dispute cannot be resolved in favor of either party yet; the primary missing piece is the seller's evidence."
+        ],
+        "gaps": [
+          {
+            "gap": "PROOF_OF_FULFILLMENT from seller",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Seller's response to the claim",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Listing description details for comparison",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          }
+        ],
+        "alternatives": [
+          "send-message",
+          "accept-claim",
+          "wait"
+        ],
+        "wait_rule_applies": false,
+        "source": "MODEL_DRAFT_VALIDATED",
+        "draft_schema_version": "model-analysis-draft-v1",
+        "prompt_version": "dp-analysis-prompt-v1",
+        "candidate_only": true,
+        "uncertainty": "The outcome depends entirely on whether the seller can provide valid proof that the correct item (queen-size) was shipped. If no proof is provided, the buyer's claim may be accepted due to lack of counter-evidence."
+      },
+      "model_provider": "ollama-local",
+      "model_name": "qwen3.6:35b-a3b-q4_K_M",
+      "recorded_analysis_mode": "LLM",
+      "recorded_at": "2026-10-21T04:04:30.032669+00:00"
+    },
+    "DEMO-BILL-O16": {
+      "analysis_id": "ANL-DEMO-BILL-O16-.239683+0000-776bb1",
+      "case_snapshot_hash": "4c8c0018a538bbd76221b98a5ffdc69d905da05ebd4d6bf45d8e5c9ab8ca0ac0",
+      "factual_summary": "The buyer disputes a billing case (O16) claiming a duplicate charge of 18.00 USD for an annual music streaming subscription, holding two receipts for one purchase, with no seller contact made yet.",
+      "grounded_facts": [
+        {
+          "fact_id": "F1",
+          "statement": "The buyer claims the same amount was charged twice for a single purchase of an annual music streaming subscription.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-BILL-O16-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F2",
+          "statement": "The buyer holds two payment receipts for one order.",
+          "fact_type": "SUPPORTED_INFERENCE",
+          "evidence_ids": [
+            "DEMO-BILL-O16-EV-AVAIL-2"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F3",
+          "statement": "The duplicate second charge was 18.00 USD and has never been refunded.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-BILL-O16-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F4",
+          "statement": "The seller has not been contacted regarding this dispute.",
+          "fact_type": "OBSERVED_FACT",
+          "evidence_ids": [
+            "DEMO-BILL-O16-EV-AVAIL-1"
+          ],
+          "provenance": "SCENARIO_DEFINED"
+        }
+      ],
+      "missing_evidence": [
+        "merchant refund record (none exists - no refund was issued)"
+      ],
+      "contradictions": [],
+      "recommendation": "provide-evidence",
+      "safety_flags": [
+        "SCENARIO_DEFINED content — not a real PayPal dispute record; do not claim real observations",
+        "fabrication of fulfillment evidence is forbidden",
+        "AI output is LLM inference from a local model — candidate analysis, not a decision; deterministic validation and manager approval still apply"
+      ],
+      "plan": {
+        "recommended_action": "provide-evidence",
+        "rationale": [
+          "The buyer claims a duplicate charge but has only provided a statement and references to receipts. To resolve the dispute, concrete evidence of both transactions (original and duplicate) is needed to verify the claim."
+        ],
+        "gaps": [
+          {
+            "gap": "Proof of the original transaction details (e.g., order ID, date)",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Proof of the duplicate transaction details (e.g., transaction ID, date)",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Verification that the seller has not issued a refund",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Confirmation that the seller was not contacted prior to this dispute",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          }
+        ],
+        "alternatives": [
+          "send-message",
+          "accept-claim",
+          "wait"
+        ],
+        "wait_rule_applies": false,
+        "source": "MODEL_DRAFT_VALIDATED",
+        "draft_schema_version": "model-analysis-draft-v1",
+        "prompt_version": "dp-analysis-prompt-v1",
+        "candidate_only": true,
+        "uncertainty": "High uncertainty regarding the validity of the duplicate charge claim without further transactional evidence from either party or system logs."
+      },
+      "model_provider": "ollama-local",
+      "model_name": "qwen3.6:35b-a3b-q4_K_M",
+      "recorded_analysis_mode": "LLM",
+      "recorded_at": "2026-10-21T04:05:51.239884+00:00"
+    },
+    "DEMO-BLOCK-O9": {
+      "analysis_id": "ANL-DEMO-BLOCK-O9-.556676+0000-a0e4b1",
+      "case_snapshot_hash": "0b32c9f4aacd1742b7ca2141bc7e5e37b0dcf7b7855fbf87335c96e1c6233252",
+      "factual_summary": "A buyer disputes a $21.00 USD transaction for a USB-C fast charger under an 'Item Not Received' claim in a sandbox environment. The case snapshot indicates no fulfillment posture and that the seller has not been contacted. The system requires proof of fulfillment from the seller, which is currently missing.",
+      "grounded_facts": [
+        {
+          "fact_id": "F1",
+          "statement": "The buyer claims they paid $21.00 USD for a USB-C fast charger and did not receive it.",
+          "fact_type": "UNVERIFIED_CLAIM",
+          "evidence_ids": [
+            "DEMO-BLOCK-O9-EV-BUYER"
+          ],
+          "provenance": "AI_INFERRED"
+        },
+        {
+          "fact_id": "F2",
+          "statement": "The case record shows no fulfillment posture was recorded for this order.",
+          "fact_type": "OBSERVED_FACT",
+          "evidence_ids": [
+            "DEMO-BLOCK-O9-EV-AVAIL-2"
+          ],
+          "provenance": "SCENARIO_DEFINED"
+        },
+        {
+          "fact_id": "F3",
+          "statement": "The seller has not been contacted regarding this dispute.",
+          "fact_type": "OBSERVED_FACT",
+          "evidence_ids": [
+            "DEMO-BLOCK-O9-EV-AVAIL-2"
+          ],
+          "provenance": "SCENARIO_DEFINED"
+        },
+        {
+          "fact_id": "F4",
+          "statement": "Proof of fulfillment is required and missing.",
+          "fact_type": "MISSING_EVIDENCE",
+          "evidence_ids": [
+            "DEMO-BLOCK-O9-EV-AVAIL-1"
+          ],
+          "provenance": "AI_INFERRED"
+        }
+      ],
+      "missing_evidence": [
+        "shipment record",
+        "any prior communication with the merchant"
+      ],
+      "contradictions": [],
+      "recommendation": "provide-evidence",
+      "safety_flags": [
+        "SCENARIO_DEFINED content — not a real PayPal dispute record; do not claim real observations",
+        "fabrication of fulfillment evidence is forbidden",
+        "AI output is LLM inference from a local model — candidate analysis, not a decision; deterministic validation and manager approval still apply"
+      ],
+      "plan": {
+        "recommended_action": "provide-evidence",
+        "rationale": [
+          "The case is in 'UNDER_REVIEW' status with a missing critical evidence type: PROOF_OF_FULFILLMENT.",
+          "The buyer has provided a statement (DEMO-BLOCK-O9-EV-BUYER), but no seller evidence exists to verify shipment.",
+          "The workflow requires the seller to provide proof of fulfillment before a decision can be made."
+        ],
+        "gaps": [
+          {
+            "gap": "PROOF_OF_FULFILLMENT from seller",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Tracking number or shipment confirmation",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          },
+          {
+            "gap": "Seller's response to the dispute",
+            "severity": "CANDIDATE",
+            "source": "MODEL_DRAFT"
+          }
+        ],
+        "alternatives": [
+          "wait"
+        ],
+        "wait_rule_applies": false,
+        "source": "MODEL_DRAFT_VALIDATED",
+        "draft_schema_version": "model-analysis-draft-v1",
+        "prompt_version": "dp-analysis-prompt-v1",
+        "candidate_only": true,
+        "uncertainty": "Low. The scenario is clearly defined as a sandbox test, and the missing evidence requirement is explicit in the case structure."
+      },
+      "model_provider": "ollama-local",
+      "model_name": "qwen3.6:35b-a3b-q4_K_M",
+      "recorded_analysis_mode": "LLM",
+      "recorded_at": "2026-10-21T04:06:59.556828+00:00"
+    }
+  }
+}

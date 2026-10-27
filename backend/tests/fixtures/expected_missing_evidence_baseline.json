@@ -1,0 +1,70 @@
+{
+ "O4": [
+  "real proof of fulfillment (deliberately NOT fabricated)",
+  "Real logistics records (carrier/tracking/delivery confirmation) - not fabricated."
+ ],
+ "O5": [
+  "real logistics records (deliberately NOT fabricated)",
+  "Real logistics records - deliberately not fabricated."
+ ],
+ "O6": [
+  "tracking number (order shipped via untracked method per scenario design)",
+  "buyer photos (NOT fabricated; statement-only by discipline)",
+  "Tracking number (none exists by design); buyer-side condition photos (not fabricated)."
+ ],
+ "O7": [
+  "any shipment record (none exists by design)",
+  "seller response to buyer contact",
+  "Proof of fulfillment (carrier/tracking/delivery) - none to submit."
+ ],
+ "O8": [
+  "carrier name",
+  "tracking number",
+  "any shipment record in the merchant's books",
+  "Carrier/tracking/delivery confirmation - none exist."
+ ],
+ "O9": [
+  "shipment record",
+  "any prior communication with the merchant",
+  "Proof of fulfillment - none exists."
+ ],
+ "O10": [
+  "real logistics records (deliberately NOT fabricated)",
+  "Real logistics records."
+ ],
+ "O11": [
+  "real logistics records",
+  "Real logistics records."
+ ],
+ "O12": [
+  "real logistics records",
+  "Real logistics records."
+ ],
+ "O13": [
+  "tracking number (untracked shipment by design)",
+  "buyer photos (not fabricated)",
+  "Tracking (none by design); buyer photos (not fabricated)."
+ ],
+ "O14": [
+  "tracking (untracked shipment)",
+  "buyer photos (not fabricated)",
+  "Tracking (none); photos (not fabricated)."
+ ],
+ "O15": [
+  "tracking (untracked shipment)",
+  "damage photos (not fabricated)",
+  "Tracking (none); photos (not fabricated)."
+ ],
+ "O16": [
+  "merchant refund record (none exists - no refund was issued)",
+  "Proof of refund (none); duplicate-charge reconciliation record."
+ ],
+ "O17": [
+  "merchant billing-stop record showing why the renewal proceeded",
+  "Proof of refund (none); cancellation-handling record."
+ ],
+ "O18": [
+  "merchant price-correction record (none)",
+  "Proof of refund (none); pricing correction record."
+ ]
+}

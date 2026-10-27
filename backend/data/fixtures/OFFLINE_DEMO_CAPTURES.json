@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "source": "SYNTHETIC_OFFLINE_FIXTURE",
+    "note": "Not a PayPal capture; offline demo only.",
+    "created_at": "2026-10-21"
+  },
+  "captures": {
+    "DEMO-CAP-9001": {
+      "id": "DEMO-CAP-9001",
+      "status": "COMPLETED",
+      "amount": {
+        "value": "42.00",
+        "currency_code": "USD"
+      },
+      "seller_receivable_breakdown": {
+        "total_refunded_amount": {
+          "value": "12.00",
+          "currency_code": "USD"
+        }
+      },
+      "create_time": "2026-10-01T00:00:00Z",
+      "update_time": "2026-10-20T00:00:00Z",
+      "links": []
+    }
+  }
+}

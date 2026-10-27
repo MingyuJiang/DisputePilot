@@ -1,0 +1,9 @@
+# Pinned to the versions the demo was verified with (2026-10-24).
+# Python >= 3.11.
+fastapi==0.143.3
+uvicorn[standard]==0.54.0
+pydantic==2.14.1
+SQLAlchemy==2.1.5
+PyYAML==6.0.3
+# the PayPal adapter imports httpx at module load (unused in replay mode)
+httpx==0.28.1

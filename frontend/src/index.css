@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   DisputePilot design tokens
+   Source of truth: docs/DESIGN_SYSTEM.md
+   Theme: light-only enterprise fintech workspace.
+------------------------------------------------------------------- */
+@theme {
+  --font-sans: "Inter", "Segoe UI Variable Text", "Segoe UI", ui-sans-serif,
+    system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Mono", Consolas,
+    "Liberation Mono", monospace;
+
+  /* Brand — deep navy */
+  --color-navy-950: #08182c;
+  --color-navy-900: #0b2138;
+  --color-navy-800: #0f2a4a;
+  --color-navy-700: #143b67;
+  --color-navy-600: #1b4f88;
+  --color-navy-100: #dbe6f3;
+  --color-navy-50: #eef4fb;
+
+  /* Ink */
+  --color-ink-strong: #0f172a;
+  --color-ink: #29384e;
+  --color-ink-muted: #5b6b82;
+  --color-ink-faint: #64748b;
+  --color-ink-inverse: #ffffff;
+
+  /* Surfaces */
+  --color-page: #f4f6fa;
+  --color-card: #ffffff;
+  --color-subtle: #f8fafc;
+  --color-sunken: #eef2f7;
+  --color-hover: #f1f5f9;
+
+  /* Lines */
+  --color-line: #e3e9f1;
+  --color-line-strong: #cbd6e4;
+
+  /* Status */
+  --color-pass: #0e7a5f;
+  --color-pass-bg: #e6f4ef;
+  --color-pass-line: #b4ddcf;
+  --color-warn: #a85b07;
+  --color-warn-bg: #fdf3e2;
+  --color-warn-line: #f0d3a4;
+  --color-stop: #b42318;
+  --color-stop-bg: #fdecea;
+  --color-stop-line: #f3c1bd;
+  --color-info: #1d4ed8;
+  --color-info-bg: #eaf0fd;
+  --color-info-line: #c2d3f7;
+  --color-infer: #6d28d9;
+  --color-infer-bg: #f3eefe;
+  --color-infer-line: #d8c9f8;
+  --color-scenario: #0e7490;
+  --color-scenario-bg: #e5f4f8;
+  --color-scenario-line: #b3dce7;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows — restrained, no glow */
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 1px 3px rgba(15, 23, 42, 0.03);
+  --shadow-raised: 0 1px 2px rgba(15, 23, 42, 0.05),
+    0 8px 24px -12px rgba(15, 23, 42, 0.18);
+  --shadow-overlay: 0 24px 60px -24px rgba(8, 24, 44, 0.35),
+    0 2px 8px rgba(8, 24, 44, 0.08);
+
+  /* Type scale — metadata floor 12 px, body floor 14 px */
+  --text-2xs: 12px;
+  --text-2xs--line-height: 18px;
+  --text-xs: 12px;
+  --text-xs--line-height: 18px;
+  --text-sm: 14px;
+  --text-sm--line-height: 22px;
+  --text-base: 14px;
+  --text-base--line-height: 22px;
+  --text-md: 15px;
+  --text-md--line-height: 24px;
+  --text-lg: 17px;
+  --text-lg--line-height: 26px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+  --text-2xl: 24px;
+  --text-2xl--line-height: 32px;
+  --text-3xl: 30px;
+  --text-3xl--line-height: 38px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-ink-strong);
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-navy-600);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: #d8e6f8;
+    color: #0b2138;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d3dce8;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .focus-ring {
+    outline: 2px solid var(--color-navy-600);
+    outline-offset: 2px;
+  }
+
+  .scroll-shadow {
+    background:
+      linear-gradient(var(--color-card) 30%, rgba(255, 255, 255, 0)) center top,
+      linear-gradient(rgba(255, 255, 255, 0), var(--color-card) 70%) center bottom,
+      radial-gradient(farthest-side at 50% 0, rgba(15, 23, 42, 0.12), transparent)
+        center top,
+      radial-gradient(farthest-side at 50% 100%, rgba(15, 23, 42, 0.12), transparent)
+        center bottom;
+    background-repeat: no-repeat;
+    background-color: var(--color-card);
+    background-size: 100% 32px, 100% 32px, 100% 12px, 100% 12px;
+    background-attachment: local, local, scroll, scroll;
+  }
+
+  .animate-in {
+    animation: dp-fade-in 180ms ease-out both;
+  }
+
+  .animate-slide-in {
+    animation: dp-slide-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  .animate-rise {
+    animation: dp-rise 200ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+}
+
+@keyframes dp-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dp-slide-in {
+  from {
+    opacity: 0.4;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes dp-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in,
+  .animate-slide-in,
+  .animate-rise {
+    animation: none;
+  }
+}

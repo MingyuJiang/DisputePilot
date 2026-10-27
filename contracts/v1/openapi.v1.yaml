@@ -1,0 +1,2303 @@
+openapi: 3.1.0
+info:
+  title: DisputePilot Agent A Backend (OFFLINE REPLAY)
+  description: 'DisputePilot v2.0 — Agent A API contract PROPOSAL (status: DRAFT). **DEMO ONLY — NOT FOR
+    PRODUCTION USE.** OFFLINE REPLAY MODE ONLY: no PayPal API calls, no network access, no credentials;
+    every execution is a deterministic replay against frozen fixtures and is NEVER a real PayPal response.
+    Identity headers (X-Actor-Id / X-Actor-Role) are demo-only role markers, NOT authentication — production
+    auth is a future port. Review: Agent B / Agent C. Freeze authority: coordinator only. v1.1 (2026-10-19, additive): ExecutionResult gains EXECUTED and UNVERIFIED. v1.2 (2026-10-20, additive): ExecutionResult gains PENDING; ProposalOut gains optional action_family. v1.3 (2026-10-21, additive): AnalysisMode gains FROZEN_REPLAY. No path changes. All error responses
+    use the unified ErrorResponse envelope (see SCHEMA_V1 §9).'
+  version: 1.3.0
+paths:
+  /api/v1/health:
+    get:
+      tags:
+      - cases
+      summary: Health
+      operationId: health_api_v1_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthOut'
+  /api/v1/cases/import:
+    post:
+      tags:
+      - cases
+      summary: Import Cases
+      operationId: import_cases_api_v1_cases_import_post
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      - name: x-actor-role
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo role header (non-production; NOT authentication). Production auth is a future
+            port. One of SPECIALIST / MANAGER / SYSTEM.
+          title: X-Actor-Role
+        description: Demo role header (non-production; NOT authentication). Production auth is a future
+          port. One of SPECIALIST / MANAGER / SYSTEM.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseImportOut'
+        '401':
+          description: Missing X-Actor-Id demo identity header (UNAUTHORIZED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Actor role not permitted for this operation (FORBIDDEN)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases:
+    get:
+      tags:
+      - cases
+      summary: List Cases
+      operationId: list_cases_api_v1_cases_get
+      parameters:
+      - name: family
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Family
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CaseSummaryOut'
+                title: Response List Cases Api V1 Cases Get
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}:
+    get:
+      tags:
+      - cases
+      summary: Get Case
+      operationId: get_case_api_v1_cases__case_id__get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/evidence:
+    get:
+      tags:
+      - cases
+      summary: List Evidence
+      operationId: list_evidence_api_v1_cases__case_id__evidence_get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EvidenceOut'
+                title: Response List Evidence Api V1 Cases  Case Id  Evidence Get
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/evidence/{evidence_id}:
+    get:
+      tags:
+      - cases
+      summary: Get Evidence
+      operationId: get_evidence_api_v1_cases__case_id__evidence__evidence_id__get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      - name: evidence_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Evidence Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvidenceOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/negative-samples:
+    get:
+      tags:
+      - cases
+      summary: List Negative Samples
+      operationId: list_negative_samples_api_v1_negative_samples_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NegativeSamplesOut'
+  /api/v1/cases/{case_id}/state:
+    post:
+      tags:
+      - cases
+      summary: Update Case State
+      description: 'TEST/DEMO HOOK (SYSTEM role): simulate a PayPal-side state change so
+
+        stale-approval behaviour can be exercised offline. Not a PayPal call.'
+      operationId: update_case_state_api_v1_cases__case_id__state_post
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      - name: note
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Note
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      - name: x-actor-role
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo role header (non-production; NOT authentication). Production auth is a future
+            port. One of SPECIALIST / MANAGER / SYSTEM.
+          title: X-Actor-Role
+        description: Demo role header (non-production; NOT authentication). Production auth is a future
+          port. One of SPECIALIST / MANAGER / SYSTEM.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Changes
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseStateUpdateOut'
+        '401':
+          description: Missing X-Actor-Id demo identity header (UNAUTHORIZED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Actor role not permitted for this operation (FORBIDDEN)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/analyses:
+    post:
+      tags:
+      - analyses
+      summary: Create Analysis
+      operationId: create_analysis_api_v1_cases__case_id__analyses_post
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/AnalysisCreate'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - analyses
+      summary: List Analyses
+      operationId: list_analyses_api_v1_cases__case_id__analyses_get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalysisOut'
+                title: Response List Analyses Api V1 Cases  Case Id  Analyses Get
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/proposals:
+    post:
+      tags:
+      - proposals
+      summary: Create Proposal
+      operationId: create_proposal_api_v1_cases__case_id__proposals_post
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProposalCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProposalOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: REQUEST_INVALID (request format; includes details) OR VALIDATION_FAILED (business
+            grounding/policy block; includes validation_report)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+      - proposals
+      summary: List Proposals
+      operationId: list_proposals_api_v1_cases__case_id__proposals_get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProposalOut'
+                title: Response List Proposals Api V1 Cases  Case Id  Proposals Get
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/proposals/generate:
+    post:
+      tags:
+      - proposals
+      summary: Generate Proposals
+      operationId: generate_proposals_api_v1_cases__case_id__proposals_generate_post
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProposalOut'
+                title: Response Generate Proposals Api V1 Cases  Case Id  Proposals Generate Post
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/proposals/{proposal_id}:
+    get:
+      tags:
+      - proposals
+      summary: Get Proposal
+      operationId: get_proposal_api_v1_proposals__proposal_id__get
+      parameters:
+      - name: proposal_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Proposal Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProposalOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/proposals/{proposal_id}/validation:
+    get:
+      tags:
+      - proposals
+      summary: Get Validation
+      operationId: get_validation_api_v1_proposals__proposal_id__validation_get
+      parameters:
+      - name: proposal_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Proposal Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ValidationReportOut'
+                - type: 'null'
+                title: Response Get Validation Api V1 Proposals  Proposal Id  Validation Get
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/proposals/{proposal_id}/submit:
+    post:
+      tags:
+      - approvals
+      summary: Submit Proposal
+      description: 'Specialist submits a validated proposal for manager approval.
+
+
+        The deterministic V1–V12 validator runs here: blocked proposals never
+
+        reach PENDING_APPROVAL.'
+      operationId: submit_proposal_api_v1_proposals__proposal_id__submit_post
+      parameters:
+      - name: proposal_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Proposal Id
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      - name: x-actor-role
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo role header (non-production; NOT authentication). Production auth is a future
+            port. One of SPECIALIST / MANAGER / SYSTEM.
+          title: X-Actor-Role
+        description: Demo role header (non-production; NOT authentication). Production auth is a future
+          port. One of SPECIALIST / MANAGER / SYSTEM.
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitProposalOut'
+        '401':
+          description: Missing X-Actor-Id demo identity header (UNAUTHORIZED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Actor role not permitted for this operation (FORBIDDEN)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate / already-decided / state conflict (CONFLICT or ILLEGAL_STATE_TRANSITION)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Business validation failed — deterministic V1–V12 block (VALIDATION_FAILED; includes
+            validation_report)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/approvals:
+    get:
+      tags:
+      - approvals
+      summary: List Approvals
+      operationId: list_approvals_api_v1_approvals_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApprovalOut'
+                type: array
+                title: Response List Approvals Api V1 Approvals Get
+  /api/v1/approvals/{approval_id}:
+    get:
+      tags:
+      - approvals
+      summary: Get Approval
+      operationId: get_approval_api_v1_approvals__approval_id__get
+      parameters:
+      - name: approval_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Approval Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/approvals/{approval_id}/decision:
+    post:
+      tags:
+      - approvals
+      summary: Decide Approval
+      description: Manager approval or rejection — exactly once per approval.
+      operationId: decide_approval_api_v1_approvals__approval_id__decision_post
+      parameters:
+      - name: approval_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Approval Id
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      - name: x-actor-role
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo role header (non-production; NOT authentication). Production auth is a future
+            port. One of SPECIALIST / MANAGER / SYSTEM.
+          title: X-Actor-Role
+        description: Demo role header (non-production; NOT authentication). Production auth is a future
+          port. One of SPECIALIST / MANAGER / SYSTEM.
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecisionIn'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalOut'
+        '401':
+          description: Missing X-Actor-Id demo identity header (UNAUTHORIZED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Actor role not permitted for this operation (FORBIDDEN)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate / already-decided / state conflict (CONFLICT or ILLEGAL_STATE_TRANSITION)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/approvals/{approval_id}/replay:
+    post:
+      tags:
+      - approvals
+      summary: Replay Execution
+      description: 'Offline replay of an approved proposal (MANAGER-authorized).
+
+
+        Revalidates V1–V12 + approval binding at execution time; duplicates are
+
+        refused by the DB unique constraint.'
+      operationId: replay_execution_api_v1_approvals__approval_id__replay_post
+      parameters:
+      - name: approval_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Approval Id
+      - name: x-actor-id
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo identity header (non-production; NOT authentication). Production auth is a
+            future port.
+          title: X-Actor-Id
+        description: Demo identity header (non-production; NOT authentication). Production auth is a future
+          port.
+      - name: x-actor-role
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Demo role header (non-production; NOT authentication). Production auth is a future
+            port. One of SPECIALIST / MANAGER / SYSTEM.
+          title: X-Actor-Role
+        description: Demo role header (non-production; NOT authentication). Production auth is a future
+          port. One of SPECIALIST / MANAGER / SYSTEM.
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+            first response instead of re-executing.'
+          title: Idempotency-Key
+        description: 'Optional idempotency key: repeating a POST with the same key returns the stored
+          first response instead of re-executing.'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplayExecutionOut'
+        '401':
+          description: Missing X-Actor-Id demo identity header (UNAUTHORIZED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Actor role not permitted for this operation (FORBIDDEN)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate / already-decided / state conflict (CONFLICT or ILLEGAL_STATE_TRANSITION)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/proposals/{proposal_id}/execution:
+    get:
+      tags:
+      - executions
+      - audit
+      summary: Get Execution
+      operationId: get_execution_api_v1_proposals__proposal_id__execution_get
+      parameters:
+      - name: proposal_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Proposal Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/executions:
+    get:
+      tags:
+      - executions
+      - audit
+      summary: List Executions
+      operationId: list_executions_api_v1_cases__case_id__executions_get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExecutionSummaryOut'
+                title: Response List Executions Api V1 Cases  Case Id  Executions Get
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/cases/{case_id}/audit:
+    get:
+      tags:
+      - executions
+      - audit
+      summary: Case Audit
+      operationId: case_audit_api_v1_cases__case_id__audit_get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditTimelineOut'
+        '404':
+          description: Unknown resource id (NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Request format invalid — malformed body or parameters (REQUEST_INVALID; includes
+            details)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ActorRole:
+      type: string
+      enum:
+      - SPECIALIST
+      - MANAGER
+      - SYSTEM
+      title: ActorRole
+      description: Demo roles. Production auth is a future port (see security/authorization.py).
+    ActorType:
+      type: string
+      enum:
+      - HUMAN
+      - SYSTEM
+      - AI
+      title: ActorType
+      description: schema.sql action_audit actor_type vocabulary.
+    AnalysisCreate:
+      properties:
+        note:
+          type: string
+          title: Note
+          default: ''
+      type: object
+      title: AnalysisCreate
+      description: 'POST body is intentionally empty: the case is the only input.'
+    AnalysisMode:
+      type: string
+      enum:
+      - STUB_DETERMINISTIC
+      - LLM
+      - FROZEN_REPLAY
+      title: AnalysisMode
+      description: Explicit separation of stub vs real LLM output (S7 §3 discipline). v1.3 adds FROZEN_REPLAY for pre-recorded, verified analyses replayed without a model.
+    AnalysisOut:
+      properties:
+        analysis_id:
+          type: string
+          title: Analysis Id
+        case_id:
+          type: string
+          title: Case Id
+        case_snapshot_hash:
+          type: string
+          title: Case Snapshot Hash
+        factual_summary:
+          type: string
+          title: Factual Summary
+        grounded_facts:
+          items:
+            $ref: '#/components/schemas/GroundedFactOut'
+          type: array
+          title: Grounded Facts
+        missing_evidence:
+          items:
+            type: string
+          type: array
+          title: Missing Evidence
+        contradictions:
+          items:
+            type: string
+          type: array
+          title: Contradictions
+        recommendation:
+          type: string
+          title: Recommendation
+        safety_flags:
+          items:
+            type: string
+          type: array
+          title: Safety Flags
+        model_provider:
+          type: string
+          title: Model Provider
+        model_name:
+          type: string
+          title: Model Name
+        analysis_mode:
+          $ref: '#/components/schemas/AnalysisMode'
+        created_at:
+          type: string
+          title: Created At
+        plan:
+          additionalProperties: true
+          type: object
+          title: Plan
+      type: object
+      required:
+      - analysis_id
+      - case_id
+      - case_snapshot_hash
+      - factual_summary
+      - grounded_facts
+      - missing_evidence
+      - contradictions
+      - recommendation
+      - safety_flags
+      - model_provider
+      - model_name
+      - analysis_mode
+      - created_at
+      title: AnalysisOut
+    ApprovalDecision:
+      type: string
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+      title: ApprovalDecision
+    ApprovalDecisionIn:
+      properties:
+        decision:
+          $ref: '#/components/schemas/ApprovalDecision'
+        reason:
+          type: string
+          minLength: 1
+          title: Reason
+      type: object
+      required:
+      - decision
+      - reason
+      title: ApprovalDecisionIn
+    ApprovalOut:
+      properties:
+        approval_id:
+          type: string
+          title: Approval Id
+        proposal_id:
+          type: string
+          title: Proposal Id
+        case_id:
+          type: string
+          title: Case Id
+        action_payload_hash:
+          type: string
+          title: Action Payload Hash
+        case_snapshot_hash:
+          type: string
+          title: Case Snapshot Hash
+        policy_version:
+          type: string
+          title: Policy Version
+        decision:
+          $ref: '#/components/schemas/ApprovalDecision'
+        reason:
+          type: string
+          title: Reason
+        actor_id:
+          type: string
+          title: Actor Id
+        actor_role:
+          $ref: '#/components/schemas/ActorRole'
+        decided_at:
+          type: string
+          title: Decided At
+      type: object
+      required:
+      - approval_id
+      - proposal_id
+      - case_id
+      - action_payload_hash
+      - case_snapshot_hash
+      - policy_version
+      - decision
+      - reason
+      - actor_id
+      - actor_role
+      - decided_at
+      title: ApprovalOut
+    AuditEventOut:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        case_id:
+          type: string
+          title: Case Id
+        event_type:
+          type: string
+          title: Event Type
+        actor_type:
+          $ref: '#/components/schemas/ActorType'
+        actor_id:
+          type: string
+          title: Actor Id
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - event_id
+      - case_id
+      - event_type
+      - actor_type
+      - actor_id
+      - payload
+      - created_at
+      title: AuditEventOut
+    AuditTimelineOut:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        events:
+          items:
+            $ref: '#/components/schemas/AuditEventOut'
+          type: array
+          title: Events
+        append_only:
+          type: boolean
+          title: Append Only
+          default: true
+      type: object
+      required:
+      - case_id
+      - events
+      title: AuditTimelineOut
+    AvailableActionOut:
+      properties:
+        rel:
+          type: string
+          title: Rel
+        method:
+          type: string
+          title: Method
+        basis:
+          $ref: '#/components/schemas/CapabilityBasis'
+      type: object
+      required:
+      - rel
+      - method
+      - basis
+      title: AvailableActionOut
+    CapabilityBasis:
+      type: string
+      enum:
+      - THEORETICAL_DOC
+      - FIXTURE_SNAPSHOT
+      - LIVE_HATEOAS
+      title: CapabilityBasis
+      description: Three-layer capability distinction (Master Prompt §7).
+    CaseImportOut:
+      properties:
+        imported:
+          type: integer
+          title: Imported
+        skipped_duplicates:
+          type: integer
+          title: Skipped Duplicates
+        negative_samples_recognized:
+          type: integer
+          title: Negative Samples Recognized
+        source_sha256:
+          type: string
+          title: Source Sha256
+        details:
+          items:
+            type: string
+          type: array
+          title: Details
+      type: object
+      required:
+      - imported
+      - skipped_duplicates
+      - negative_samples_recognized
+      - source_sha256
+      title: CaseImportOut
+    CaseOut:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        scenario_id:
+          type: string
+          title: Scenario Id
+        dispute_id:
+          type: string
+          title: Dispute Id
+        family:
+          $ref: '#/components/schemas/DisputeFamily'
+        reason:
+          $ref: '#/components/schemas/DisputeReason'
+        status:
+          $ref: '#/components/schemas/CaseWorkflowStatus'
+        dispute_status:
+          $ref: '#/components/schemas/DisputeStatus'
+        lifecycle_stage:
+          $ref: '#/components/schemas/LifecycleStage'
+        amount:
+          $ref: '#/components/schemas/MoneyOut'
+        transaction_reference:
+          $ref: '#/components/schemas/TransactionReferenceOut'
+        fulfillment_posture:
+          $ref: '#/components/schemas/FulfillmentPosture'
+        seller_contacted:
+          type: boolean
+          title: Seller Contacted
+        evidence_count:
+          type: integer
+          title: Evidence Count
+        available_actions:
+          items:
+            $ref: '#/components/schemas/AvailableActionOut'
+          type: array
+          title: Available Actions
+        evidence_requirements:
+          items:
+            $ref: '#/components/schemas/EvidenceRequirementOut'
+          type: array
+          title: Evidence Requirements
+        missing_evidence:
+          items:
+            type: string
+          type: array
+          title: Missing Evidence
+        provenance:
+          $ref: '#/components/schemas/ProvenanceLabel'
+        verification_level:
+          $ref: '#/components/schemas/ValidationLevel'
+        case_version:
+          type: integer
+          title: Case Version
+        snapshot_hash:
+          type: string
+          title: Snapshot Hash
+        live_status_note:
+          type: string
+          title: Live Status Note
+          default: ''
+        created_at:
+          type: string
+          title: Created At
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - case_id
+      - scenario_id
+      - dispute_id
+      - family
+      - reason
+      - status
+      - dispute_status
+      - lifecycle_stage
+      - amount
+      - transaction_reference
+      - fulfillment_posture
+      - seller_contacted
+      - evidence_count
+      - available_actions
+      - evidence_requirements
+      - provenance
+      - verification_level
+      - case_version
+      - snapshot_hash
+      - created_at
+      - updated_at
+      title: CaseOut
+    CaseStateUpdateOut:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        state_version:
+          type: integer
+          title: State Version
+        state_hash:
+          type: string
+          title: State Hash
+        warning:
+          type: string
+          title: Warning
+      type: object
+      required:
+      - case_id
+      - state_version
+      - state_hash
+      - warning
+      title: CaseStateUpdateOut
+      description: '``POST /api/v1/cases/{case_id}/state`` — SYSTEM test-hook result.
+
+
+        Mutating the fixture state bumps ``state_version`` and changes
+
+        ``state_hash``; approvals bound to the previous decision hash become
+
+        stale (replay is then blocked).'
+    CaseSummaryOut:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        family:
+          $ref: '#/components/schemas/DisputeFamily'
+        reason:
+          $ref: '#/components/schemas/DisputeReason'
+        status:
+          $ref: '#/components/schemas/CaseWorkflowStatus'
+        amount:
+          $ref: '#/components/schemas/MoneyOut'
+        fulfillment_posture:
+          $ref: '#/components/schemas/FulfillmentPosture'
+        provenance:
+          $ref: '#/components/schemas/ProvenanceLabel'
+        verification_level:
+          $ref: '#/components/schemas/ValidationLevel'
+      type: object
+      required:
+      - case_id
+      - family
+      - reason
+      - status
+      - amount
+      - fulfillment_posture
+      - provenance
+      - verification_level
+      title: CaseSummaryOut
+    CaseWorkflowStatus:
+      type: string
+      enum:
+      - IMPORTED
+      - ANALYZED
+      - PROPOSED
+      - PENDING_APPROVAL
+      - APPROVED
+      - REJECTED
+      - REPLAYED
+      - BLOCKED
+      title: CaseWorkflowStatus
+      description: 'Offline workflow status of a case inside THIS backend.
+
+
+        Deliberately separate from the observed PayPal dispute status
+
+        (``dispute_status`` / ``lifecycle_stage`` fields on CaseRecord).'
+    DisputeFamily:
+      type: string
+      enum:
+      - INR
+      - SNAD
+      - BILLING
+      title: DisputeFamily
+    DisputeReason:
+      type: string
+      enum:
+      - MERCHANDISE_OR_SERVICE_NOT_RECEIVED
+      - MERCHANDISE_OR_SERVICE_NOT_AS_DESCRIBED
+      - UNAUTHORISED
+      - CREDIT_NOT_PROCESSED
+      - DUPLICATE_TRANSACTION
+      - INCORRECT_AMOUNT
+      - PAYMENT_BY_OTHER_MEANS
+      - CANCELED_RECURRING_BILLING
+      - OTHER
+      title: DisputeReason
+      description: Official PayPal dispute reasons (verbatim spelling, incl. UNAUTHORISED).
+    DisputeStatus:
+      type: string
+      enum:
+      - WAITING_FOR_SELLER_RESPONSE
+      - WAITING_FOR_BUYER_RESPONSE
+      - UNDER_REVIEW
+      - RESOLVED
+      - OTHER
+      - UNKNOWN
+      title: DisputeStatus
+      description: Observed PayPal dispute status values seen in fixtures/docs.
+    ErrorBody:
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+          title: Message
+        details:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Details
+        validation_report:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Validation Report
+      type: object
+      required:
+      - code
+      - message
+      title: ErrorBody
+      description: 'Envelope body. ``details``/``validation_report`` appear only when the
+
+        error class provides them (``REQUEST_INVALID`` / ``VALIDATION_FAILED``).'
+    ErrorCode:
+      type: string
+      enum:
+      - UNAUTHORIZED
+      - FORBIDDEN
+      - NOT_FOUND
+      - CONFLICT
+      - ILLEGAL_STATE_TRANSITION
+      - VALIDATION_FAILED
+      - REQUEST_INVALID
+      - DOMAIN_ERROR
+      title: ErrorCode
+      description: Stable machine-readable error codes (envelope ``error.code``).
+    ErrorResponse:
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      type: object
+      required:
+      - error
+      title: ErrorResponse
+      description: The single error envelope used by every 4xx/5xx response.
+    EvidenceOut:
+      properties:
+        evidence_id:
+          type: string
+          title: Evidence Id
+        case_id:
+          type: string
+          title: Case Id
+        evidence_type:
+          $ref: '#/components/schemas/EvidenceType'
+        content:
+          type: string
+          title: Content
+        source_type:
+          type: string
+          title: Source Type
+        provenance:
+          $ref: '#/components/schemas/ProvenanceLabel'
+        verification_level:
+          $ref: '#/components/schemas/ValidationLevel'
+        source_reference:
+          type: string
+          title: Source Reference
+        observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed At
+        integrity_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Integrity Hash
+      type: object
+      required:
+      - evidence_id
+      - case_id
+      - evidence_type
+      - content
+      - source_type
+      - provenance
+      - verification_level
+      - source_reference
+      title: EvidenceOut
+    EvidenceRequirementOut:
+      properties:
+        evidence_type:
+          $ref: '#/components/schemas/EvidenceType'
+        source:
+          $ref: '#/components/schemas/EvidenceSource'
+        open:
+          type: boolean
+          title: Open
+      type: object
+      required:
+      - evidence_type
+      - source
+      - open
+      title: EvidenceRequirementOut
+    EvidenceSource:
+      type: string
+      enum:
+      - REQUESTED_FROM_SELLER
+      - SUBMITTED_BY_SELLER
+      - SUBMITTED_BY_BUYER
+      - UNKNOWN
+      title: EvidenceSource
+      description: '``source`` values observed inside dispute ``evidences[]``.'
+    EvidenceType:
+      type: string
+      enum:
+      - PROOF_OF_FULFILLMENT
+      - PROOF_OF_REFUND
+      - OTHER
+      - BUYER_STATEMENT
+      - ORDER_RECORD
+      - CAPTURE_RECORD
+      - SELLER_COMMUNICATION
+      - CASE_NOTE
+      title: EvidenceType
+      description: Evidence types referenced by capability matrix §3 / case snapshots.
+    ExecutionMode:
+      type: string
+      enum:
+      - REPLAY
+      - LIVE
+      title: ExecutionMode
+    ExecutionOut:
+      properties:
+        execution_id:
+          type: string
+          title: Execution Id
+        proposal_id:
+          type: string
+          title: Proposal Id
+        case_id:
+          type: string
+          title: Case Id
+        execution_mode:
+          $ref: '#/components/schemas/ExecutionMode'
+        simulated:
+          type: boolean
+          title: Simulated
+        result:
+          $ref: '#/components/schemas/ExecutionResult'
+        gateway:
+          type: string
+          title: Gateway
+        request_snapshot:
+          additionalProperties: true
+          type: object
+          title: Request Snapshot
+        response_snapshot:
+          additionalProperties: true
+          type: object
+          title: Response Snapshot
+        verification:
+          additionalProperties: true
+          type: object
+          title: Verification
+        created_at:
+          type: string
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: OFFLINE REPLAY result — not a PayPal API response
+      type: object
+      required:
+      - execution_id
+      - proposal_id
+      - case_id
+      - execution_mode
+      - simulated
+      - result
+      - gateway
+      - created_at
+      title: ExecutionOut
+      description: '``GET /api/v1/proposals/{proposal_id}/execution`` — full record.'
+    ExecutionResult:
+      type: string
+      enum:
+      - REPLAYED
+      - BLOCKED
+      - FAILED
+      - EXECUTED
+      - UNVERIFIED
+      - PENDING
+      title: ExecutionResult
+      description: >-
+        v1.1 additive: EXECUTED (live request accepted and remote state confirmed
+        by a subsequent GET) and UNVERIFIED (live request outcome unknown;
+        human review required) apply to LIVE mode only. v1.2 adds PENDING for
+        live payments (e.g. refund) that are accepted but not yet settled.
+        REPLAYED remains the offline replay result and is never a live PayPal
+        response.
+      description: 'Outcome of one (replay) execution attempt.
+
+
+        REPLAYED — the deterministic replay ran to completion (still NOT a PayPal
+
+        success); BLOCKED — pre-execution revalidation or approval-binding check
+
+        refused the write; FAILED — reserved for a gateway-level failure.'
+    ExecutionSummaryOut:
+      properties:
+        execution_id:
+          type: string
+          title: Execution Id
+        proposal_id:
+          type: string
+          title: Proposal Id
+        execution_mode:
+          $ref: '#/components/schemas/ExecutionMode'
+        simulated:
+          type: boolean
+          title: Simulated
+        result:
+          $ref: '#/components/schemas/ExecutionResult'
+        gateway:
+          type: string
+          title: Gateway
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - execution_id
+      - proposal_id
+      - execution_mode
+      - simulated
+      - result
+      - gateway
+      - created_at
+      title: ExecutionSummaryOut
+      description: One row of ``GET /api/v1/cases/{case_id}/executions``.
+    FulfillmentPosture:
+      type: string
+      enum:
+      - NONE
+      - SHIPPED_NO_TRACKING
+      - SIMULATED_FULFILLMENT
+      - SHIPPED_WITH_TRACKING
+      - REFUNDED
+      title: FulfillmentPosture
+      description: ScenarioSpec fulfillment posture (SCENARIO_FACTORY_ARCHITECTURE §2).
+    GroundedFactOut:
+      properties:
+        fact_id:
+          type: string
+          title: Fact Id
+        statement:
+          type: string
+          title: Statement
+        fact_type:
+          $ref: '#/components/schemas/GroundedFactType'
+        evidence_ids:
+          items:
+            type: string
+          type: array
+          title: Evidence Ids
+        provenance:
+          $ref: '#/components/schemas/ProvenanceLabel'
+      type: object
+      required:
+      - fact_id
+      - statement
+      - fact_type
+      - evidence_ids
+      - provenance
+      title: GroundedFactOut
+    GroundedFactType:
+      type: string
+      enum:
+      - OBSERVED_FACT
+      - SUPPORTED_INFERENCE
+      - UNVERIFIED_CLAIM
+      - MISSING_EVIDENCE
+      title: GroundedFactType
+      description: Fact classes used by Evidence Grounding (Master Prompt §6 Step 2).
+    HealthOut:
+      properties:
+        status:
+          type: string
+          title: Status
+        service:
+          type: string
+          title: Service
+        execution_mode:
+          type: string
+          title: Execution Mode
+        network_access:
+          type: string
+          title: Network Access
+        policy_version:
+          type: string
+          title: Policy Version
+        note:
+          type: string
+          title: Note
+      type: object
+      required:
+      - status
+      - service
+      - execution_mode
+      - network_access
+      - policy_version
+      - note
+      title: HealthOut
+      description: '``GET /api/v1/health`` — liveness + offline-mode proof.'
+    LifecycleStage:
+      type: string
+      enum:
+      - INQUIRY
+      - UNDER_PAYPAL_REVIEW
+      - APPEAL
+      - RESOLVED
+      - UNKNOWN
+      title: LifecycleStage
+      description: '``dispute_life_cycle_stage`` values (API_CAPABILITY_MATRIX §7.3).'
+    MoneyOut:
+      properties:
+        value_minor:
+          type: integer
+          title: Value Minor
+        currency:
+          type: string
+          title: Currency
+        display:
+          type: string
+          title: Display
+          default: ''
+      type: object
+      required:
+      - value_minor
+      - currency
+      title: MoneyOut
+    NegativeSamplesOut:
+      properties:
+        count:
+          type: integer
+          title: Count
+        purpose:
+          type: string
+          title: Purpose
+        samples:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Samples
+      type: object
+      required:
+      - count
+      - purpose
+      title: NegativeSamplesOut
+      description: '``GET /api/v1/negative-samples`` — recognition-only samples.
+
+
+        ``samples`` keeps the raw snapshot dictionaries (heterogeneous by
+
+        design: each negative sample has its own scenario fields plus
+
+        ``expected_rejection`` / ``source_review_status``).'
+    ProposalCreate:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        analysis_id:
+          type: string
+          title: Analysis Id
+        action_type:
+          type: string
+          title: Action Type
+        action_family:
+          type: string
+          enum:
+          - DISPUTE
+          - PAYMENT
+          default: DISPUTE
+          title: Action Family
+          description: >-
+            v1.2 additive: DISPUTE covers dispute-side actions
+            (provide-evidence, send-message, …); PAYMENT covers capture-level
+            money actions (partial-refund, full-refund). A refund never resolves
+            or closes the dispute by itself.
+        action_payload:
+          additionalProperties: true
+          type: object
+          title: Action Payload
+        rationale:
+          items:
+            type: string
+          type: array
+          title: Rationale
+        required_evidence:
+          items:
+            type: string
+          type: array
+          title: Required Evidence
+        expected_preconditions:
+          items:
+            type: string
+          type: array
+          title: Expected Preconditions
+        evidence_ids:
+          items:
+            type: string
+          type: array
+          title: Evidence Ids
+      type: object
+      required:
+      - case_id
+      - analysis_id
+      - action_type
+      - action_payload
+      title: ProposalCreate
+      description: Client-supplied proposal draft. Payload is schema-checked (V7).
+    ProposalOut:
+      properties:
+        proposal_id:
+          type: string
+          title: Proposal Id
+        case_id:
+          type: string
+          title: Case Id
+        analysis_id:
+          type: string
+          title: Analysis Id
+        action_type:
+          type: string
+          title: Action Type
+        action_family:
+          type: string
+          enum:
+          - DISPUTE
+          - PAYMENT
+          default: DISPUTE
+          title: Action Family
+          description: >-
+            v1.2 additive: DISPUTE covers dispute-side actions
+            (provide-evidence, send-message, …); PAYMENT covers capture-level
+            money actions (partial-refund, full-refund). A refund never resolves
+            or closes the dispute by itself.
+        action_payload:
+          additionalProperties: true
+          type: object
+          title: Action Payload
+        expected_preconditions:
+          items:
+            type: string
+          type: array
+          title: Expected Preconditions
+        required_evidence:
+          items:
+            type: string
+          type: array
+          title: Required Evidence
+        rationale:
+          items:
+            type: string
+          type: array
+          title: Rationale
+        evidence_ids:
+          items:
+            type: string
+          type: array
+          title: Evidence Ids
+        risk_level:
+          $ref: '#/components/schemas/RiskLevel'
+        validation_status:
+          $ref: '#/components/schemas/ValidationStatus'
+        state:
+          $ref: '#/components/schemas/ProposalState'
+        snapshot_hash:
+          type: string
+          title: Snapshot Hash
+        payload_hash:
+          type: string
+          title: Payload Hash
+        policy_version:
+          type: string
+          title: Policy Version
+        execution_authorized:
+          type: boolean
+          title: Execution Authorized
+          default: false
+        created_at:
+          type: string
+          title: Created At
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - proposal_id
+      - case_id
+      - analysis_id
+      - action_type
+      - action_payload
+      - expected_preconditions
+      - required_evidence
+      - rationale
+      - evidence_ids
+      - risk_level
+      - validation_status
+      - state
+      - snapshot_hash
+      - payload_hash
+      - policy_version
+      - created_at
+      - updated_at
+      title: ProposalOut
+    ProposalState:
+      type: string
+      enum:
+      - DRAFT
+      - VALIDATED
+      - PENDING_APPROVAL
+      - APPROVED
+      - REJECTED
+      - BLOCKED
+      - REPLAY_EXECUTED
+      - FAILED
+      title: ProposalState
+      description: Approval state machine (Master Prompt §7).
+    ProposalSubmitSummaryOut:
+      properties:
+        proposal_id:
+          type: string
+          title: Proposal Id
+        state:
+          $ref: '#/components/schemas/ProposalState'
+        validation_status:
+          $ref: '#/components/schemas/ValidationStatus'
+      type: object
+      required:
+      - proposal_id
+      - state
+      - validation_status
+      title: ProposalSubmitSummaryOut
+      description: Proposal state echo inside the submit response.
+    ProvenanceLabel:
+      type: string
+      enum:
+      - PAYPAL_API_OBSERVED
+      - HUMAN_OBSERVED_SANDBOX_UI
+      - SCENARIO_DEFINED
+      - AI_INFERRED
+      - SIMULATED_COMPOSITE
+      title: ProvenanceLabel
+      description: Five-layer provenance vocabulary (禁混写).
+    ReplayExecutionOut:
+      properties:
+        execution_id:
+          type: string
+          title: Execution Id
+        proposal_id:
+          type: string
+          title: Proposal Id
+        case_id:
+          type: string
+          title: Case Id
+        execution_mode:
+          $ref: '#/components/schemas/ExecutionMode'
+        simulated:
+          type: boolean
+          title: Simulated
+        result:
+          $ref: '#/components/schemas/ExecutionResult'
+        gateway:
+          type: string
+          title: Gateway
+        response_snapshot:
+          additionalProperties: true
+          type: object
+          title: Response Snapshot
+        verification:
+          additionalProperties: true
+          type: object
+          title: Verification
+        created_at:
+          type: string
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: OFFLINE REPLAY result — not a PayPal API response
+      type: object
+      required:
+      - execution_id
+      - proposal_id
+      - case_id
+      - execution_mode
+      - simulated
+      - result
+      - gateway
+      - created_at
+      title: ReplayExecutionOut
+      description: '``POST /api/v1/approvals/{approval_id}/replay`` — replay response.
+
+
+        Same execution payload as :class:`ExecutionOut` minus ``request_snapshot``
+
+        (the request echo is available via the GET execution endpoint).'
+    RiskLevel:
+      type: string
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      title: RiskLevel
+    SubmitProposalOut:
+      properties:
+        proposal:
+          $ref: '#/components/schemas/ProposalSubmitSummaryOut'
+        approval:
+          $ref: '#/components/schemas/ApprovalOut'
+      type: object
+      required:
+      - proposal
+      - approval
+      title: SubmitProposalOut
+      description: '``POST /api/v1/proposals/{proposal_id}/submit`` response.
+
+
+        The deterministic V1–V12 validator runs inside submit: only PASSED
+
+        proposals reach PENDING_APPROVAL and create an approval.'
+    TransactionReferenceOut:
+      properties:
+        order_id:
+          type: string
+          title: Order Id
+        capture_id:
+          type: string
+          title: Capture Id
+        buyer_transaction_id:
+          type: string
+          title: Buyer Transaction Id
+        dispute_id:
+          type: string
+          title: Dispute Id
+      type: object
+      required:
+      - order_id
+      - capture_id
+      - buyer_transaction_id
+      - dispute_id
+      title: TransactionReferenceOut
+    ValidationFindingOut:
+      properties:
+        validator_id:
+          type: string
+          title: Validator Id
+        status:
+          type: string
+          title: Status
+        detail:
+          type: string
+          title: Detail
+        basis:
+          type: string
+          title: Basis
+        doc_reference:
+          type: string
+          title: Doc Reference
+      type: object
+      required:
+      - validator_id
+      - status
+      - detail
+      - basis
+      - doc_reference
+      title: ValidationFindingOut
+    ValidationLevel:
+      type: string
+      enum:
+      - FROZEN_SANDBOX_E1_VERIFIED
+      - SCENARIO_DEFINED_OFFLINE_CONTENT
+      - NEGATIVE_CONTROL_REJECTION_TEST_ONLY
+      - UNKNOWN
+      title: ValidationLevel
+      description: Verification level of a case snapshot (CASE_SNAPSHOT_NOTES §4).
+    ValidationReportOut:
+      properties:
+        report_id:
+          type: string
+          title: Report Id
+        proposal_id:
+          type: string
+          title: Proposal Id
+        case_id:
+          type: string
+          title: Case Id
+        action_type:
+          type: string
+          title: Action Type
+        passed:
+          type: boolean
+          title: Passed
+        blocked_reasons:
+          items:
+            type: string
+          type: array
+          title: Blocked Reasons
+        findings:
+          items:
+            $ref: '#/components/schemas/ValidationFindingOut'
+          type: array
+          title: Findings
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - report_id
+      - proposal_id
+      - case_id
+      - action_type
+      - passed
+      - blocked_reasons
+      - findings
+      - created_at
+      title: ValidationReportOut
+    ValidationStatus:
+      type: string
+      enum:
+      - NOT_RUN
+      - PASSED
+      - FAILED
+      title: ValidationStatus

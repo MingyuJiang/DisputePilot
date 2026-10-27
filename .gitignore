@@ -1,0 +1,67 @@
+# Repository exclusions: credentials, environments, and runtime state.
+
+# Credentials and private environment configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+token.json
+cookies*.json
+
+# Local dependencies, caches, builds
+.venv/
+venv/
+node_modules/
+frontend/dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.tsbuildinfo
+*.egg-info/
+.coverage
+htmlcov/
+coverage/
+*.log
+
+# Runtime and local tools
+backend/out/
+backend/data/*.sqlite3
+data/backups/
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+.tools/
+.tooling/
+.workbuddy/
+.aws/
+browser-profile/
+playwright-profile/
+research/
+
+# Model weights and local installers
+*.gguf
+*.safetensors
+*.onnx
+*.pt
+*.pth
+*.ckpt
+*.zip
+*.7z
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# The accepted release intentionally includes these clean synthetic fixtures.
+# Do not replace them with working merchant/Sandbox databases.
+!data/demo.sqlite3
+!data/demo.golden.sqlite3
